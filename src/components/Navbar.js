@@ -6,6 +6,8 @@ import {
   Button,
   IconButton,
 } from "@material-tailwind/react";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
  
 export default function Example() {
   const [openNav, setOpenNav] = useState(false);
@@ -18,65 +20,35 @@ export default function Example() {
   }, []);
  
   const navList = (
-    <ul className="mb-4 mt-2 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
+    <ul className="mb-4 mt-2 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:justify-end lg:align-center lg:gap-6">
       <Typography
         as="li"
         variant="small"
         color="blue-gray"
-        className="p-1 font-normal"
+        className="p-1 px-10 font-normal"
       >
-        <a href="/" className="flex items-center">
-          Chairs/Beds
-        </a>
-      </Typography>
-      <Typography
-        as="li"
-        variant="small"
-        color="blue-gray"
-        className="p-1 font-normal"
-      >
-        <a href="/" className="flex items-center">
-          Tables
-        </a>
-      </Typography>
-      <Typography
-        as="li"
-        variant="small"
-        color="blue-gray"
-        className="p-1 font-normal"
-      >
-        <a href="/" className="flex items-center">
-          Rugs
-        </a>
-      </Typography>
-      <Typography
-        as="li"
-        variant="small"
-        color="blue-gray"
-        className="p-1 font-normal"
-      >
-        <a href="/" className="flex items-center">
-          Outdoors
+        <a href="/search" className="flex align-center">
+          Search
         </a>
       </Typography>
     </ul>
   );
  
   return (
-    <Navbar className="mx-auto max-w-screen-xl py-2 px-4 lg:px-8 lg:py-4 blurred">
+    <Navbar className="mx-auto mt-2 max-w-screen-xl py-2 px-4 lg:px-8 lg:py-4 blurred">
       <div className="container mx-auto flex items-center justify-between text-blue-gray-900">
         <Typography
           as="a"
           href="/"
           variant="small"
-          className="mr-4 cursor-pointer py-1.5 font-normal"
+          className="flex-none mr-4 cursor-pointer py-1.5 font-normal"
         >
           <span>Final Fantasy XIV Furniture</span>
         </Typography>
-        <div className="hidden lg:block">{navList}</div>
-        <Button variant="gradient" size="sm" className="hidden lg:inline-block">
-          <span>Buy Now</span>
-        </Button>
+        <div className="hidden flex-auto lg:block">{navList}</div>
+        <a href="/cart">
+          <FontAwesomeIcon icon={faShoppingCart} />
+        </a>
         <IconButton
           variant="text"
           className="ml-auto h-6 w-6 text-inherit hover:bg-transparent focus:bg-transparent active:bg-transparent lg:hidden"
@@ -117,9 +89,12 @@ export default function Example() {
       </div>
       <MobileNav open={openNav}>
         {navList}
-        <Button variant="gradient" size="sm" fullWidth className="mb-2">
-          <span>Cart</span>
-        </Button>
+        <div className="cart">
+          <a href="/cart">
+            <FontAwesomeIcon icon={faShoppingCart} />
+          </a>
+          {/* Gotta put ternary operator here <span>{totalCart}</span> */}
+        </div>
       </MobileNav>
     </Navbar>
   );
