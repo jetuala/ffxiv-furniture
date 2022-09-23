@@ -4,9 +4,26 @@ export const ADD_PRODUCT = "ADD_PRODUCT";
 export const REMOVE_PRODUCT = "REMOVE_PRODUCT";
 
 const addProductToCart = (product, state) => {
-  console.log(...state.cart);
-  // updatedCart.push({...product, quantity: 1})
-  // return {...state, cart: updatedCart}
+  // can't use spread operator if there's nothing in the cart
+  if (state.cart.length === 0) {
+    state.cart.push({product: {...product}, "quantity": 1});
+  } else {
+    // gotta figure out how to compare product IDs here, hmmm...
+    const newProductID = product.fields.id;
+    state.cart.forEach(element => {
+      if (element.product.fields.id === newProductID) {
+        console.log("current product: " + element.product.fields.name + " and quantity is " + element.quantity)
+        return ++element.quantity
+      } else {
+        state.cart.push({product: {...product}, "quantity": 1});
+        console.log("New product added: " + product.fields.name)
+      }
+    });
+  }
+  return {cart: [...state.cart]}
+  // REDUCERS HAVE TO RETURN SOMETHING!!! YOU HAVE SPECIFY EXACTLY WHAT IT RETURNS!!!
+
+  // This *might* be working? Still not sure if I'm returning the correct thing.
 }
 
 export const shopReducer = (state, action) => {
@@ -17,7 +34,6 @@ export const shopReducer = (state, action) => {
 }
 
 // const addProductToCart = (product, state) => {
-//   console.log(state.cart)
 //   // const updatedCart = [...state];
 //   // const updatedItemIndex = updatedCart.findIndex(
 //   //   item => item.fields.id === product.fields.id

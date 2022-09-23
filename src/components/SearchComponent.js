@@ -10,7 +10,7 @@ export default function SearchComponent() {
     const [loading, setLoading] = useState(true);
     const [ isShowing, toggle, currentItem ] = useDialog();
     // Gotta import specific named function here OMG I was so frustrated with this lol
-    const { addToCart } = useContext(ShopContext);
+    const { cart, addToCart } = useContext(ShopContext);
 
     const contentful = require('contentful');
     const client = contentful.createClient({
@@ -29,6 +29,7 @@ export default function SearchComponent() {
         <div>
             { (loading) ? <h1>Loading...</h1> : 
                 <div className="flex flex-wrap container mx-auto">
+                    <Typography className="text-white">Items in cart: {cart.length}</Typography>
                     {furniture.map((item) => {
                         return (
                             <div className="w-1/3 px-10" key={item.fields.id}>

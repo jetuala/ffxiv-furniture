@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from 'react-router-dom';
 import {
   Navbar,
   MobileNav,
@@ -46,9 +47,9 @@ export default function Example() {
           <span>Final Fantasy XIV Furniture</span>
         </Typography>
         <div className="hidden flex-auto lg:block">{navList}</div>
-        <a href="/cart">
+        <Link to="/cart">
           <FontAwesomeIcon icon={faShoppingCart} />
-        </a>
+        </Link>
         <IconButton
           variant="text"
           className="ml-auto h-6 w-6 text-inherit hover:bg-transparent focus:bg-transparent active:bg-transparent lg:hidden"
@@ -90,9 +91,9 @@ export default function Example() {
       <MobileNav open={openNav}>
         {navList}
         <div className="cart">
-          <a href="/cart">
+          <Link to="/cart">
             <FontAwesomeIcon icon={faShoppingCart} />
-          </a>
+          </Link>
           {/* Gotta put ternary operator here <span>{totalCart}</span> */}
         </div>
       </MobileNav>

@@ -5,6 +5,7 @@ import ShopContext from './ShopContext';
 const Global = (props) => {
     const initialCart = {cart: []};
     const [ cartState, dispatch ] = useReducer(shopReducer, initialCart);
+    // useReducers are kinda backwards in my mind, you set initial state on the right, "variables" on the left
 
     const addToCart = (product) => {
         dispatch({type: "ADD_PRODUCT", product: product});
@@ -17,7 +18,7 @@ const Global = (props) => {
     
     return (
         <ShopContext.Provider value={{
-            cart: cartState,
+            cart: cartState.cart,
             addToCart: addToCart,
             deleteFromCart: deleteFromCart
         }}>
