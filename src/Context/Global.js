@@ -1,19 +1,23 @@
-import React, { useContext } from 'react';
+import React, { useReducer } from 'react';
+import { shopReducer } from './cartReducers';
 import ShopContext from './ShopContext';
 
 const Global = (props) => {
+    const initialCart = {cart: []};
+    const [ cartState, dispatch ] = useReducer(shopReducer, initialCart);
+
     const addToCart = (product) => {
-        console.log(product.fields.name + " added to cart")
+        dispatch({type: "ADD_PRODUCT", product: product});
     }
     
-    const deleteFromCart = () => {
+    const deleteFromCart = (product) => {
+        dispatch({type: "REMOVE_PRODUCT", product: product.fields.id})
         console.log("delete from cart")
     }
     
     return (
         <ShopContext.Provider value={{
-            something: "something",
-            cart: [],
+            cart: cartState,
             addToCart: addToCart,
             deleteFromCart: deleteFromCart
         }}>

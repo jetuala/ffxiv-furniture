@@ -3,7 +3,7 @@ import useDialog from '../hooks/useDialog.js';
 import {
     Card, CardHeader, CardBody, CardFooter, Typography, Button, Dialog, DialogHeader, DialogBody, DialogFooter
   } from "@material-tailwind/react";
-import ShopContext from '../Context/ShopContext.js';
+import ShopContext from '../Context/ShopContext'
 
 export default function SearchComponent() {
     const [furniture, setFurniture] = useState();
@@ -22,7 +22,6 @@ export default function SearchComponent() {
         client.getEntries({content_type: 'ffxivFurniture'}).then(function (entries) {
             setFurniture(entries.items);
             setLoading(false);
-            console.log(entries.items);
         });
     }, []);
     
