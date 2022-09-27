@@ -28,9 +28,9 @@ export default function Example() {
         color="blue-gray"
         className="p-1 px-10 font-normal"
       >
-        <a href="/search" className="flex align-center">
+        <Link to="/search" className="flex align-center">
           Search
-        </a>
+        </Link>
       </Typography>
     </ul>
   );

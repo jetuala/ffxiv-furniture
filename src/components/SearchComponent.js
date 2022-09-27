@@ -3,7 +3,10 @@ import useDialog from '../hooks/useDialog.js';
 import {
     Card, CardHeader, CardBody, CardFooter, Typography, Button, Dialog, DialogHeader, DialogBody, DialogFooter
   } from "@material-tailwind/react";
+import { Link } from 'react-router-dom';
 import ShopContext from '../Context/ShopContext'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 
 export default function SearchComponent() {
     const [furniture, setFurniture] = useState();
@@ -24,12 +27,11 @@ export default function SearchComponent() {
             setLoading(false);
         });
     }, []);
-    
+
     return (
         <div>
             { (loading) ? <h1>Loading...</h1> : 
                 <div className="flex flex-wrap container mx-auto">
-                    <Typography className="text-white">Items in cart: {cart.length}</Typography>
                     {furniture.map((item) => {
                         return (
                             <div className="w-1/3 px-10" key={item.fields.id}>
@@ -59,10 +61,15 @@ export default function SearchComponent() {
 
                     {/* Dialog box lags fiercely when mapped for each furniture item, gotta handle it in state */}
                     <Dialog open={isShowing} handler={toggle}>
-                        <DialogHeader>
-                            <Typography variant="h2">
+                        <DialogHeader className="flex justify-between">
+                            <Typography variant="h2" className="flex-initial">
                                 {(currentItem) ? currentItem.fields.name : <></>}
                             </Typography>
+                            <div className="">
+                                <Link to="/cart">
+                                    <FontAwesomeIcon icon={faShoppingCart} />
+                                </Link>
+                            </div>
                         </DialogHeader>
                         <DialogBody divider>
                             <Typography>

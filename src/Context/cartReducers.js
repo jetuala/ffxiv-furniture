@@ -4,32 +4,46 @@ export const ADD_PRODUCT = "ADD_PRODUCT";
 export const REMOVE_PRODUCT = "REMOVE_PRODUCT";
 
 const addProductToCart = (product, state) => {
+  const newProductID = product.fields.id;
   // can't use spread operator if there's nothing in the cart
   if (state.cart.length === 0) {
-    state.cart.push({product: {...product}, "quantity": 1});
+    state.cart.push({product: {...product}, quantity: 1});
+    console.log(state.cart);
+    return state;
   } else {
-    // gotta figure out how to compare product IDs here, hmmm...
-    const newProductID = product.fields.id;
-    state.cart.forEach(element => {
-      if (element.product.fields.id === newProductID) {
-        console.log("current product: " + element.product.fields.name + " and quantity is " + element.quantity)
-        return ++element.quantity
-      } else {
-        state.cart.push({product: {...product}, "quantity": 1});
-        console.log("New product added: " + product.fields.name)
-      }
-    });
-  }
-  return {cart: [...state.cart]}
-  // REDUCERS HAVE TO RETURN SOMETHING!!! YOU HAVE SPECIFY EXACTLY WHAT IT RETURNS!!!
+    // match the ID
+    let updatedCart = [...state.cart];
+    const updatedItemIndex = updatedCart.findIndex(
+      item => item.product.fields.id === newProductID
+    )
 
-  // This *might* be working? Still not sure if I'm returning the correct thing.
+      //returning updatedCart is NOT WORKING
+
+    if (updatedItemIndex < 0) {
+      // push product if ID is not found
+      updatedCart.push({product: {...product}, quantity: 1});
+      console.log(updatedCart);
+      return updatedCart;
+    } else {
+      // update quantity
+      const updatedItem = {
+        ...updatedCart[updatedItemIndex]
+      };
+      ++updatedItem.quantity;
+      updatedCart[updatedItemIndex] = updatedItem;
+      console.log(updatedCart)
+      return updatedCart;
+    }
+      // REDUCERS HAVE TO RETURN SOMETHING!!! YOU HAVE SPECIFY EXACTLY WHAT IT RETURNS!!!
+  }
 }
 
 export const shopReducer = (state, action) => {
   switch (action.type) {
     case ADD_PRODUCT:
       return addProductToCart(action.product, state);
+    default:
+      throw new Error();
   }
 }
 
