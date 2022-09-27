@@ -8,7 +8,7 @@ export default function Cart() {
 
     useEffect(() => {
         console.log(cart);
-    }, cart)
+    }, [cart])
 
     return (
         <div>

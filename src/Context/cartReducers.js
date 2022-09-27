@@ -5,45 +5,55 @@ export const REMOVE_PRODUCT = "REMOVE_PRODUCT";
 
 const addProductToCart = (product, state) => {
   const newProductID = product.fields.id;
-  // can't use spread operator if there's nothing in the cart
-  if (state.cart.length === 0) {
-    state.cart.push({product: {...product}, quantity: 1});
-    console.log(state.cart);
-    return state;
+  let updatedCart = [...state.cart];
+  // Find index of item already present in cart
+  const updatedItemIndex = updatedCart.findIndex(
+    item => item.product.fields.id === newProductID
+  )
+
+  if (updatedItemIndex < 0) {
+    // THIS WORKS!! DON"T GET RID OF THIS!!! LOL
+    return {
+      cart: state.cart.concat({product: product, quantity: 1})
+    }
   } else {
-    // match the ID
-    let updatedCart = [...state.cart];
-    const updatedItemIndex = updatedCart.findIndex(
-      item => item.product.fields.id === newProductID
-    )
-
-      //returning updatedCart is NOT WORKING
-
-    if (updatedItemIndex < 0) {
-      // push product if ID is not found
-      updatedCart.push({product: {...product}, quantity: 1});
-      console.log(updatedCart);
-      return updatedCart;
-    } else {
-      // update quantity
       const updatedItem = {
         ...updatedCart[updatedItemIndex]
       };
       ++updatedItem.quantity;
       updatedCart[updatedItemIndex] = updatedItem;
-      console.log(updatedCart)
-      return updatedCart;
-    }
-      // REDUCERS HAVE TO RETURN SOMETHING!!! YOU HAVE SPECIFY EXACTLY WHAT IT RETURNS!!!
+      return {
+        cart: updatedCart
+      };
   }
+      // REDUCERS HAVE TO RETURN SOMETHING!!! YOU HAVE SPECIFY EXACTLY WHAT IT RETURNS!!!
 }
+
+const removeProductFromCart = (productId, state) => {
+  console.log("Removing product with id: " + productId);
+  const updatedCart = [...state.cart];
+  const updatedItemIndex = updatedCart.findIndex(item => item.product.fields.id === productId);
+
+  const updatedItem = {
+    ...updatedCart[updatedItemIndex]
+  };
+  --updatedItem.quantity;
+  if (updatedItem.quantity <= 0) {
+    updatedCart.splice(updatedItemIndex, 1);
+  } else {
+    updatedCart[updatedItemIndex] = updatedItem;
+  }
+  return { cart: updatedCart };
+};
 
 export const shopReducer = (state, action) => {
   switch (action.type) {
     case ADD_PRODUCT:
       return addProductToCart(action.product, state);
+    case REMOVE_PRODUCT:
+      return removeProductFromCart(action.productID, state);
     default:
-      throw new Error();
+      return state;
   }
 }
 
