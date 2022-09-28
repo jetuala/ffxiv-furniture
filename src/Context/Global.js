@@ -15,12 +15,22 @@ const Global = (props) => {
         dispatch({type: "REMOVE_PRODUCT", product: product.fields.id})
         console.log("delete from cart")
     }
+
+    const increaseQuantity = (productId) => {
+        dispatch({type: "INCREASE_QUANTITY", productId: productId})
+    }
     
+    const decreaseQuantity = (product) => {
+        dispatch({type: "DECREASE_QUANTITY", product: product.fields.id})
+    }
+
     return (
         <ShopContext.Provider value={{
             cart: cartState.cart,
             addToCart: addToCart,
-            deleteFromCart: deleteFromCart
+            deleteFromCart: deleteFromCart,
+            increaseQuantity: increaseQuantity,
+            decreaseQuantity: decreaseQuantity
         }}>
             {props.children}
         </ShopContext.Provider>

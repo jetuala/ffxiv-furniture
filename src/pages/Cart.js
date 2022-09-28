@@ -4,8 +4,10 @@ import { Link } from 'react-router-dom';
 import ShopContext from '../Context/ShopContext'
 
 export default function Cart() {
-    const { cart } = useContext(ShopContext);
+    const { cart, removeProductFromCart, increaseQuantity, decreaseQuantity } = useContext(ShopContext);
     const [ total, setTotal ] = useState(0);
+
+    console.log(cart)
 
     useEffect(() => {
         let cartTotal = 0;
@@ -31,7 +33,7 @@ export default function Cart() {
                             <CardBody className="grid grid-cols-5">
                                 <img
                                     src={item.product.fields.icon.fields.file.url}
-                                    alt="img-blur-shadow"
+                                    alt={item.product.fields.name}
                                     className=""
                                 />
                                 <div>
@@ -42,9 +44,9 @@ export default function Cart() {
                                     <Typography>{item.product.fields.priceInGil}</Typography>
                                 </div>
                                 <div>
-                                    <Button>-</Button>
+                                    <Button onClick={() => decreaseQuantity(item)}>-</Button>
                                     <Typography>Quantity: {item.quantity}</Typography>
-                                    <Button>+</Button>
+                                    <Button onClick={() => increaseQuantity(item.product.fields.id)}>+</Button>
                                 </div>
                                 <div>
                                     <Typography>Total:</Typography>
@@ -57,7 +59,7 @@ export default function Cart() {
                 )
             })}
             <Card className="w-2/3">
-                <CardBody>
+                <CardBody className="flex flex-row-reverse">
                     <Typography>Total: {total}</Typography>
                 </CardBody>
             </Card>
