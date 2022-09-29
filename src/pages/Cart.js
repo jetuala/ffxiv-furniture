@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import ShopContext from '../Context/ShopContext'
 
 export default function Cart() {
-    const { cart, removeProductFromCart, increaseQuantity, decreaseQuantity } = useContext(ShopContext);
+    const { cart, deleteFromCart, increaseQuantity, decreaseQuantity } = useContext(ShopContext);
     const [ total, setTotal ] = useState(0);
 
     useEffect(() => {
@@ -49,6 +49,9 @@ export default function Cart() {
                                 <div>
                                     <Typography>Total:</Typography>
                                     <Typography>{item.product.fields.priceInGil * item.quantity}</Typography>
+                                </div>
+                                <div>
+                                    <Button onClick={() => deleteFromCart(item.product.fields.id)}>Remove item</Button>
                                 </div>
                             </CardBody>
                         </Card>

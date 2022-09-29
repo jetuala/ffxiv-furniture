@@ -11,8 +11,8 @@ const Global = (props) => {
         dispatch({type: "ADD_PRODUCT", product: product});
     }
     
-    const deleteFromCart = (product) => {
-        dispatch({type: "REMOVE_PRODUCT", product: product.fields.id})
+    const deleteFromCart = (productId) => {
+        dispatch({type: "REMOVE_PRODUCT", productId: productId})
         console.log("delete from cart")
     }
 
