@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import useDialog from '../hooks/useDialog.js';
 import {
-    Card, CardHeader, CardBody, CardFooter, Typography, Button, Dialog, DialogHeader, DialogBody, DialogFooter
+    Card, CardHeader, CardBody, CardFooter, Typography, Button, Dialog, DialogHeader, DialogBody, DialogFooter, Checkbox, Input
   } from "@material-tailwind/react";
 import { Link } from 'react-router-dom';
 import ShopContext from '../Context/ShopContext'
@@ -30,6 +30,16 @@ export default function SearchComponent() {
 
     return (
         <div>
+            <div id="searchbar">
+                <Checkbox ripple={true} label="All" defaultChecked />
+                <Checkbox label="Bed" />
+                <Checkbox label="Table" />
+                <Checkbox label="Chair" />
+                <Checkbox label="Wall-mounted" />
+                <Checkbox label="Rug" />
+                
+                <Input label="Filter results..." />
+            </div>
             { (loading) ? <h1>Loading...</h1> : 
                 <div className="flex flex-wrap container mx-auto">
                     {furniture.map((item) => {
