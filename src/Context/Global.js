@@ -20,8 +20,8 @@ const Global = (props) => {
         dispatch({type: "INCREASE_QUANTITY", productId: productId})
     }
     
-    const decreaseQuantity = (product) => {
-        dispatch({type: "DECREASE_QUANTITY", product: product.fields.id})
+    const decreaseQuantity = (productId) => {
+        dispatch({type: "DECREASE_QUANTITY", productId: productId})
     }
 
     return (

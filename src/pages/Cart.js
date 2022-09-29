@@ -7,8 +7,6 @@ export default function Cart() {
     const { cart, removeProductFromCart, increaseQuantity, decreaseQuantity } = useContext(ShopContext);
     const [ total, setTotal ] = useState(0);
 
-    console.log(cart)
-
     useEffect(() => {
         let cartTotal = 0;
         cart.forEach(item => {
@@ -44,7 +42,7 @@ export default function Cart() {
                                     <Typography>{item.product.fields.priceInGil}</Typography>
                                 </div>
                                 <div>
-                                    <Button onClick={() => decreaseQuantity(item)}>-</Button>
+                                    <Button onClick={() => decreaseQuantity(item.product.fields.id)}>-</Button>
                                     <Typography>Quantity: {item.quantity}</Typography>
                                     <Button onClick={() => increaseQuantity(item.product.fields.id)}>+</Button>
                                 </div>

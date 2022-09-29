@@ -75,7 +75,11 @@ const decreaseQuantity = (productId, state) => {
   const updatedItem = {
     ...updatedCart[updatedItemIndex]
   };
-  --updatedItem.quantity;
+  if (updatedItem.quantity <= 1) {
+    updatedItem.quantity = 0;
+  } else {
+    --updatedItem.quantity;
+  }
   updatedCart[updatedItemIndex] = updatedItem;
   return {
     cart: updatedCart
@@ -89,9 +93,9 @@ export const shopReducer = (state, action) => {
     case REMOVE_PRODUCT:
       return removeProductFromCart(action.productID, state);
     case INCREASE_QUANTITY:
-      return increaseQuantity(action, state);
+      return increaseQuantity(action.productId, state);
     case DECREASE_QUANTITY:
-      return decreaseQuantity(action, state);
+      return decreaseQuantity(action.productId, state);
     default:
       return state;
   }
