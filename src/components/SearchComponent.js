@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import useDialog from '../hooks/useDialog.js';
 import {
-    Card, CardHeader, CardBody, CardFooter, Typography, Button, Dialog, DialogHeader, DialogBody, DialogFooter, Checkbox, Input
+    Card, CardHeader, CardBody, CardFooter, Typography, Button, Dialog, DialogHeader, DialogBody, DialogFooter, Checkbox, Input, Radio
   } from "@material-tailwind/react";
 import { Link } from 'react-router-dom';
 import ShopContext from '../Context/ShopContext'
@@ -10,6 +10,7 @@ import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 
 export default function SearchComponent() {
     const [furniture, setFurniture] = useState();
+    const [sortType, setSortType] = useState("Id");
     const [loading, setLoading] = useState(true);
     const [ isShowing, toggle, currentItem ] = useDialog();
     // Gotta import specific named function here OMG I was so frustrated with this lol
@@ -28,21 +29,61 @@ export default function SearchComponent() {
         });
     }, []);
 
+    // Nope nope nope. Can't sort by just changing order of original array, gotta change state by returning new array.
+    // Don't want to use a reducer for a simple sort function lol
+
+    function sortByName(array) {
+        const newArray = [...array]
+        newArray.sort((a,b) => (a.fields.name > b.fields.name) ? 1 : ((b.fields.name > a.fields.name) ? -1 : 0))
+        setFurniture(newArray);
+    }
+
+    function sortByNameReverse(array) {
+        const newArray = [...array]
+        newArray.sort((a,b) => (a.fields.name < b.fields.name) ? 1 : ((b.fields.name < a.fields.name) ? -1 : 0))
+        setFurniture(newArray)
+    }
+
+    function sortLeastToMostExpensive(array) {
+        const newArray = [...array]
+        newArray.sort((a,b) => {
+            return (a.fields.priceInGil - b.fields.priceInGil)
+        })
+        setFurniture(newArray)
+    }
+
+    function sortMostToLeastExpensive(array) {
+        const newArray = [...array]
+        newArray.sort((a,b) => {
+            return (b.fields.priceInGil - a.fields.priceInGil)
+        })
+        setFurniture(newArray)
+    }
+
     return (
         <div>
             <div id="searchbar">
-                <Checkbox ripple={true} label="All" defaultChecked />
+                <Checkbox label="Featured" defaultChecked />
+                <Checkbox label="All" />
                 <Checkbox label="Bed" />
                 <Checkbox label="Table" />
                 <Checkbox label="Chair" />
                 <Checkbox label="Wall-mounted" />
                 <Checkbox label="Rug" />
-                
-                <Input label="Filter results..." />
+
+                <div>
+                    <Typography>Sort by...</Typography>
+                    <Radio name="sort" value="AtoZ" label="A to Z" onClick={() => sortByName(furniture)}/>
+                    <Radio name="sort" value="ZtoA" label="Z to A" onClick={() => sortByNameReverse(furniture)}/>
+                    <Radio name="sort" value="lowToHigh" label="Price lowest to highest" onClick={() => sortLeastToMostExpensive(furniture)}/>
+                    <Radio name="sort" value="highToLow" label="Price highest to lowest" onClick={() => sortMostToLeastExpensive(furniture)}/>
+                </div>
+                {/* Argh... gotta sort by price, too :P */}
             </div>
             { (loading) ? <h1>Loading...</h1> : 
                 <div className="flex flex-wrap container mx-auto">
                     {furniture.map((item) => {
+                        // If item.fields.type equals a type in state??
                         return (
                             <div className="w-1/3 px-10" key={item.fields.id}>
                                 <Card className="m-10 mx-auto" key={item.fields.id}>
