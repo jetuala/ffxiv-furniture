@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import useDialog from '../hooks/useDialog.js';
 import {
-    Card, CardHeader, CardBody, CardFooter, Typography, Button, Dialog, DialogHeader, DialogBody, DialogFooter, Checkbox, Input, Radio
+    Card, CardHeader, CardBody, CardFooter, Typography, Button, Dialog, DialogHeader, DialogBody, DialogFooter, Checkbox, Radio
   } from "@material-tailwind/react";
 import { Link } from 'react-router-dom';
 import ShopContext from '../Context/ShopContext'
@@ -10,11 +10,11 @@ import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 
 export default function SearchComponent() {
     const [furniture, setFurniture] = useState();
-    const [sortType, setSortType] = useState("Id");
+    const [filterArray, setFilterArray] = useState(["Bed", "Table", "Chair", "Rug", "Wall-mounted"]);
     const [loading, setLoading] = useState(true);
     const [ isShowing, toggle, currentItem ] = useDialog();
     // Gotta import specific named function here OMG I was so frustrated with this lol
-    const { cart, addToCart } = useContext(ShopContext);
+    const { addToCart } = useContext(ShopContext);
 
     const contentful = require('contentful');
     const client = contentful.createClient({
@@ -26,11 +26,18 @@ export default function SearchComponent() {
         client.getEntries({content_type: 'ffxivFurniture'}).then(function (entries) {
             setFurniture(entries.items);
             setLoading(false);
+            sortByID(furniture);
         });
     }, []);
 
     // Nope nope nope. Can't sort by just changing order of original array, gotta change state by returning new array.
     // Don't want to use a reducer for a simple sort function lol
+
+    function sortByID(array) {
+        const newArray = [...array]
+        newArray.sort((a,b) => (a.fields.id > b.fields.id) ? 1 : ((b.fields.id > a.fields.id) ? -1 : 0))
+        setFurniture(newArray);
+    }
 
     function sortByName(array) {
         const newArray = [...array]
@@ -60,23 +67,38 @@ export default function SearchComponent() {
         setFurniture(newArray)
     }
 
+    const filteredFurniture = (furniture, filterArray) => { 
+        let newArray = []
+        filterArray.forEach(filter => {
+            // gotta set newArray to newArray.concat! concat returns a new array every time
+            newArray = newArray.concat(
+                // this works. this returns an array which matches each element of filterArray
+                furniture.filter(el => el.fields.type === filter)
+            )
+        })
+        setFurniture(newArray)
+        sortByID(furniture)
+    }
+
     return (
         <div>
             <div id="searchbar">
-                <Checkbox label="Featured" defaultChecked />
-                <Checkbox label="All" />
+                <Checkbox label="All" defaultChecked />
+                <Checkbox label="Featured" />
                 <Checkbox label="Bed" />
                 <Checkbox label="Table" />
                 <Checkbox label="Chair" />
                 <Checkbox label="Wall-mounted" />
                 <Checkbox label="Rug" />
+                <Button onClick={() => filteredFurniture(furniture, filterArray)}>Set Filter</Button>
 
                 <div>
                     <Typography>Sort by...</Typography>
-                    <Radio name="sort" value="AtoZ" label="A to Z" onClick={() => sortByName(furniture)}/>
-                    <Radio name="sort" value="ZtoA" label="Z to A" onClick={() => sortByNameReverse(furniture)}/>
-                    <Radio name="sort" value="lowToHigh" label="Price lowest to highest" onClick={() => sortLeastToMostExpensive(furniture)}/>
-                    <Radio name="sort" value="highToLow" label="Price highest to lowest" onClick={() => sortMostToLeastExpensive(furniture)}/>
+                    <Radio name="sort" value="ID" label="ID" onClick={() => sortByID(furniture)} defaultChecked />
+                    <Radio name="sort" value="AtoZ" label="A to Z" onClick={() => sortByName(furniture)} />
+                    <Radio name="sort" value="ZtoA" label="Z to A" onClick={() => sortByNameReverse(furniture)} />
+                    <Radio name="sort" value="lowToHigh" label="Price lowest to highest" onClick={() => sortLeastToMostExpensive(furniture)} />
+                    <Radio name="sort" value="highToLow" label="Price highest to lowest" onClick={() => sortMostToLeastExpensive(furniture)} />
                 </div>
                 {/* Argh... gotta sort by price, too :P */}
             </div>
