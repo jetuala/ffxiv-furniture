@@ -10,7 +10,7 @@ import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 
 export default function SearchComponent() {
     const [furniture, setFurniture] = useState();
-    const [filterArray, setFilterArray] = useState(["Bed", "Table", "Chair", "Rug", "Wall-mounted"]);
+    const [typeFilter, setTypeFilter] = useState({Bed: true, Table: true, Chair: true, Rug: true, "Wall-mounted": true});
     const [loading, setLoading] = useState(true);
     const [ isShowing, toggle, currentItem ] = useDialog();
     // Gotta import specific named function here OMG I was so frustrated with this lol
@@ -26,9 +26,28 @@ export default function SearchComponent() {
         client.getEntries({content_type: 'ffxivFurniture'}).then(function (entries) {
             setFurniture(entries.items);
             setLoading(false);
-            sortByID(furniture);
+            console.log(furniture);
+            // sortByID(furniture);
         });
     }, []);
+
+    const onChange = (e) => {
+        setTypeFilter({ ...typeFilter, [e.target.value]: e.target.checked });
+    };
+ 
+// Sort functionality
+    const filteredFurniture = (furniture, filterArray) => { 
+        let newArray = []
+        filterArray.forEach(filter => {
+            // gotta set newArray to newArray.concat! concat returns a new array every time
+            newArray = newArray.concat(
+                // this works. this returns an array which matches each element of filterArray
+                furniture.filter(el => el.fields.type === filter)
+            )
+        })
+        setFurniture(newArray)
+        // sortByID(furniture)
+    }
 
     // Nope nope nope. Can't sort by just changing order of original array, gotta change state by returning new array.
     // Don't want to use a reducer for a simple sort function lol
@@ -67,30 +86,16 @@ export default function SearchComponent() {
         setFurniture(newArray)
     }
 
-    const filteredFurniture = (furniture, filterArray) => { 
-        let newArray = []
-        filterArray.forEach(filter => {
-            // gotta set newArray to newArray.concat! concat returns a new array every time
-            newArray = newArray.concat(
-                // this works. this returns an array which matches each element of filterArray
-                furniture.filter(el => el.fields.type === filter)
-            )
-        })
-        setFurniture(newArray)
-        sortByID(furniture)
-    }
-
     return (
         <div>
             <div id="searchbar">
-                <Checkbox label="All" defaultChecked />
-                <Checkbox label="Featured" />
-                <Checkbox label="Bed" />
-                <Checkbox label="Table" />
-                <Checkbox label="Chair" />
-                <Checkbox label="Wall-mounted" />
-                <Checkbox label="Rug" />
-                <Button onClick={() => filteredFurniture(furniture, filterArray)}>Set Filter</Button>
+                {/* <Checkbox label="All" defaultChecked />
+                <Checkbox label="Featured" name="type" /> */}
+                <Checkbox label="Bed" name="type" value="Bed" checked={typeFilter.Bed} onChange={onChange} />
+                <Checkbox label="Table" name="type" value="Table" checked={typeFilter.Table} onChange={onChange} />
+                <Checkbox label="Chair" name="type" value="Chair" checked={typeFilter.Chair} onChange={onChange} />
+                <Checkbox label="Wall-mounted" name="type" value="Wall-mounted" checked={typeFilter["Wall-mounted"]} onChange={onChange} />
+                <Checkbox label="Rug" name="type" value="Rug" checked={typeFilter.Rug} onChange={onChange} />
 
                 <div>
                     <Typography>Sort by...</Typography>
@@ -100,11 +105,11 @@ export default function SearchComponent() {
                     <Radio name="sort" value="lowToHigh" label="Price lowest to highest" onClick={() => sortLeastToMostExpensive(furniture)} />
                     <Radio name="sort" value="highToLow" label="Price highest to lowest" onClick={() => sortMostToLeastExpensive(furniture)} />
                 </div>
-                {/* Argh... gotta sort by price, too :P */}
             </div>
             { (loading) ? <h1>Loading...</h1> : 
                 <div className="flex flex-wrap container mx-auto">
-                    {furniture.map((item) => {
+                    {(furniture.length === 0) ? <h1 className="text-white">Sorry, no items match your criteria.</h1> :
+                    furniture.filter(x => typeFilter[x.fields.type]).map((item) => {
                         // If item.fields.type equals a type in state??
                         return (
                             <div className="w-1/3 px-10" key={item.fields.id}>
@@ -132,7 +137,6 @@ export default function SearchComponent() {
                         )
                     })}
 
-                    {/* Dialog box lags fiercely when mapped for each furniture item, gotta handle it in state */}
                     <Dialog open={isShowing} handler={toggle}>
                         <DialogHeader className="flex justify-between">
                             <Typography variant="h2" className="flex-initial">
