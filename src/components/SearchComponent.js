@@ -12,9 +12,10 @@ export default function SearchComponent() {
     const [furniture, setFurniture] = useState();
     const [typeFilter, setTypeFilter] = useState({Bed: true, Table: true, Chair: true, Rug: true, "Wall-mounted": true});
     const [loading, setLoading] = useState(true);
+    const [cartTotal, setCartTotal] = useState();
     const [ isShowing, toggle, currentItem ] = useDialog();
     // Gotta import specific named function here OMG I was so frustrated with this lol
-    const { addToCart } = useContext(ShopContext);
+    const { cart, addToCart } = useContext(ShopContext);
 
     const contentful = require('contentful');
     const client = contentful.createClient({
@@ -26,10 +27,16 @@ export default function SearchComponent() {
         client.getEntries({content_type: 'ffxivFurniture'}).then(function (entries) {
             setFurniture(entries.items);
             setLoading(false);
-            console.log(furniture);
             // sortByID(furniture);
         });
     }, []);
+
+    useEffect(() => {
+        if (cart.length > 0) {
+            let itemTotal = cart.reduce((accum,item) => accum + item.quantity, 0)
+            setCartTotal(itemTotal);
+        }
+    }, [cart]);
 
     const onChange = (e) => {
         setTypeFilter({ ...typeFilter, [e.target.value]: e.target.checked });
@@ -87,18 +94,20 @@ export default function SearchComponent() {
     }
 
     return (
-        <div>
-            <div id="searchbar">
+        <div className="flex mt-10">
+            <div id="searchbar" className='flex-initial pl-6'>
                 {/* <Checkbox label="All" defaultChecked />
                 <Checkbox label="Featured" name="type" /> */}
-                <Checkbox label="Bed" name="type" value="Bed" checked={typeFilter.Bed} onChange={onChange} />
-                <Checkbox label="Table" name="type" value="Table" checked={typeFilter.Table} onChange={onChange} />
-                <Checkbox label="Chair" name="type" value="Chair" checked={typeFilter.Chair} onChange={onChange} />
-                <Checkbox label="Wall-mounted" name="type" value="Wall-mounted" checked={typeFilter["Wall-mounted"]} onChange={onChange} />
-                <Checkbox label="Rug" name="type" value="Rug" checked={typeFilter.Rug} onChange={onChange} />
-
-                <div>
-                    <Typography>Sort by...</Typography>
+                <div className='flex flex-col'>
+                    <Typography className="text-white">Display by type:</Typography>
+                    <Checkbox label="Bed" name="type" value="Bed" checked={typeFilter.Bed} onChange={onChange} />
+                    <Checkbox label="Table" name="type" value="Table" checked={typeFilter.Table} onChange={onChange} />
+                    <Checkbox label="Chair" name="type" value="Chair" checked={typeFilter.Chair} onChange={onChange} />
+                    <Checkbox label="Wall-mounted" name="type" value="Wall-mounted" checked={typeFilter["Wall-mounted"]} onChange={onChange} />
+                    <Checkbox label="Rug" name="type" value="Rug" checked={typeFilter.Rug} onChange={onChange} />
+                </div>
+                <div className='flex flex-col'>
+                    <Typography className="text-white">Sort by:</Typography>
                     <Radio name="sort" value="ID" label="ID" onClick={() => sortByID(furniture)} defaultChecked />
                     <Radio name="sort" value="AtoZ" label="A to Z" onClick={() => sortByName(furniture)} />
                     <Radio name="sort" value="ZtoA" label="Z to A" onClick={() => sortByNameReverse(furniture)} />
@@ -146,6 +155,7 @@ export default function SearchComponent() {
                                 <Link to="/cart">
                                     <FontAwesomeIcon icon={faShoppingCart} />
                                 </Link>
+                                <span class="inline-flex px-2 py-1 mr-2 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full">{cartTotal}</span>
                             </div>
                         </DialogHeader>
                         <DialogBody divider>

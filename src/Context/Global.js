@@ -13,7 +13,6 @@ const Global = (props) => {
     
     const deleteFromCart = (productId) => {
         dispatch({type: "REMOVE_PRODUCT", productId: productId})
-        console.log("delete from cart")
     }
 
     const increaseQuantity = (productId) => {

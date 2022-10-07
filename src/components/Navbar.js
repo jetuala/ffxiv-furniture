@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useContext, useEffect } from "react";
 import { Link } from 'react-router-dom';
+import ShopContext from '../Context/ShopContext';
 import {
   Navbar,
   MobileNav,
@@ -12,6 +13,8 @@ import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
  
 export default function Example() {
   const [openNav, setOpenNav] = useState(false);
+  const { cart } = useContext(ShopContext);
+  const [cartTotal, setCartTotal] = useState();
  
   useEffect(() => {
     window.addEventListener(
@@ -20,6 +23,14 @@ export default function Example() {
     );
   }, []);
  
+  // I have to put cartTotal in context...?
+  useEffect(() => {
+    if (cart.length > 0) {
+        let itemTotal = cart.reduce((accum,item) => accum + item.quantity, 0)
+        setCartTotal(itemTotal);
+    }
+}, [cart]);
+
   const navList = (
     <ul className="mb-4 mt-2 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:justify-end lg:align-center lg:gap-6">
       <Typography
@@ -94,6 +105,7 @@ export default function Example() {
           <Link to="/cart">
             <FontAwesomeIcon icon={faShoppingCart} />
           </Link>
+          <span class="inline-flex px-2 py-1 mr-2 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full">{cartTotal}</span>
           {/* Gotta put ternary operator here <span>{totalCart}</span> */}
         </div>
       </MobileNav>
