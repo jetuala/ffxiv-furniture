@@ -151,11 +151,11 @@ export default function SearchComponent() {
                             <Typography variant="h2" className="flex-initial">
                                 {(currentItem) ? currentItem.fields.name : <></>}
                             </Typography>
-                            <div className="">
+                            <div id="cartIcon" className="relative">
                                 <Link to="/cart">
                                     <FontAwesomeIcon icon={faShoppingCart} />
                                 </Link>
-                                <span class="inline-flex px-2 py-1 mr-2 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full">{cartTotal}</span>
+                                {(cart.length > 0) ? <span class="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">{cartTotal}</span> : <span />}        
                             </div>
                         </DialogHeader>
                         <DialogBody divider>

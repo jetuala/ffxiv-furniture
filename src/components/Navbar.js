@@ -48,7 +48,7 @@ export default function Example() {
  
   return (
     <Navbar className="mx-auto mt-2 max-w-screen-xl py-2 px-4 lg:px-8 lg:py-4 blurred">
-      <div className="container mx-auto flex items-center justify-between text-blue-gray-900">
+      <div className="relative container mx-auto flex items-center justify-between text-blue-gray-900">
         <Typography
           as="a"
           href="/"
@@ -61,6 +61,7 @@ export default function Example() {
         <Link to="/cart">
           <FontAwesomeIcon icon={faShoppingCart} />
         </Link>
+        {(cart.length > 0) ? <span class="absolute top-1 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">{cartTotal}</span> : <span />}        
         <IconButton
           variant="text"
           className="ml-auto h-6 w-6 text-inherit hover:bg-transparent focus:bg-transparent active:bg-transparent lg:hidden"
@@ -101,11 +102,11 @@ export default function Example() {
       </div>
       <MobileNav open={openNav}>
         {navList}
-        <div className="cart">
+        <div className="relative cart">
           <Link to="/cart">
             <FontAwesomeIcon icon={faShoppingCart} />
           </Link>
-          <span class="inline-flex px-2 py-1 mr-2 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full">{cartTotal}</span>
+          <span class="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">{cartTotal}</span>
           {/* Gotta put ternary operator here <span>{totalCart}</span> */}
         </div>
       </MobileNav>
