@@ -17,17 +17,17 @@ export default function Cart() {
 
     return (
         (cart.length === 0) ? 
-        <div>
-            <Typography className="text-white">You currently have nothing in your cart.</Typography> 
-            <Typography className="text-white"><Link to="/search">Back to Search Page</Link></Typography>
+        <div className='flex flex-col'>
+                <Typography className="self-center text-white" variant="h4">You currently have nothing in your cart.</Typography> 
+                <Typography className="self-center text-white" variant="h4"><Link to="/search">Back to Search Page</Link></Typography>
         </div>
         :
-        <div>
-            <Typography className="text-white">You have the following items in your cart:</Typography>
+        <div className='flex flex-col'>
+            <Typography className="self-center text-white">You have the following items in your cart:</Typography>
             {cart.map(item => {
                 return (
-                    <div key={item.product.fields.id}>
-                        <Card className="w-2/3">
+                    <div key={item.product.fields.id} className="self-center w-2/3">
+                        <Card className="mt-1">
                             <CardBody className="grid grid-cols-5">
                                 <img
                                     src={item.product.fields.icon.fields.file.url}
@@ -59,12 +59,12 @@ export default function Cart() {
                     </div>
                 )
             })}
-            <Card className="w-2/3">
+            <Card className="self-center w-2/3 mt-1">
                 <CardBody className="flex flex-row-reverse">
                     <Typography>Total: {total}</Typography>
                 </CardBody>
             </Card>
-            <Typography className="text-white"><Link to="/search">Back to Search Page</Link></Typography>
+            <Typography className="self-center text-white"><Link to="/search">Back to Search Page</Link></Typography>
         </div>
     )
 }

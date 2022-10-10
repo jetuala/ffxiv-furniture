@@ -11,16 +11,15 @@ import Cart from './pages/Cart';
 import Global from './Context/Global';
 
 function App() {
-
   return (
     <Global>
-      <Router>
-        <Routes>
-          <Route path="/" element={<Homepage />} />
-          <Route exact path="/search" element={<Search />} />
-          <Route exact path="/cart" element={<Cart />} />
-        </Routes>
-      </Router>
+        <Router>
+          <Routes>
+              <Route path="/" element={<Homepage />} />
+              <Route exact path="/search" element={<Search />} />
+              <Route exact path="/cart" element={<Cart />} />
+          </Routes>
+        </Router>
     </Global>
   );
 }
