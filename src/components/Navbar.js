@@ -31,22 +31,22 @@ export default function Example() {
 }, [cart]);
 
   const navList = (
-    <ul className="mb-4 mt-2 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:justify-end lg:align-center lg:gap-6">    
+    <ul className="mb-2 mt-2 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:justify-end lg:align-center lg:gap-6">    
       <Typography
         as="li"
         variant="small"
         color="blue-gray"
-        className="p-1 px-10 font-normal"
+        className="p-1 self-center px-10 font-normal"
       >
         <Link to="/search" className="flex align-center">
           Search
         </Link>
       </Typography>
-      <Typography as="li" variant="small" color="blue-gray" className="relative p-1 px-10 font-normal">
+      <Typography as="li" variant="small" color="blue-gray" className="relative p-1 self-center px-10 font-normal">
         <Link to="/cart">
             <FontAwesomeIcon icon={faShoppingCart} />
             <div>
-              {(cart.length > 0) ? <span class="absolute top-1 right-10 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">{cartTotal}</span> : <span />}  
+              {(cart.length > 0) ? <span class="absolute bottom-2 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">{cartTotal}</span> : <span />}  
             </div>      
         </Link>
       </Typography>

@@ -121,8 +121,8 @@ export default function SearchComponent() {
                     furniture.filter(x => typeFilter[x.fields.type]).map((item) => {
                         // If item.fields.type equals a type in state??
                         return (
-                            <div className="w-1/3 px-10" key={item.fields.id}>
-                                <Card className="m-10 mx-auto" key={item.fields.id}>
+                            <div className="lg:w-1/3 md:w-1/2 sm:w-3/4 xs:w-3/4 px-10" key={item.fields.id}>
+                                <Card className="m-10 mx-auto md:max-w-300 sm:max-w-300" key={item.fields.id}>
                                     <CardHeader color="brown" className="relative h-56">
                                         <img
                                         src={item.fields.image.fields.file.url}
