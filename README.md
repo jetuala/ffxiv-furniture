@@ -14,9 +14,9 @@ I learned SO much! File organization, how to properly use reducers/hooks/custom 
 
 Some specific things that I had a hard time with, that I hope I won't forget any time soon:
 
-1.) Reducers are pure functions and have to return something!
-2.) Named and default exports are different!
-3.) The second parameter in the useEffect hook is important!
+1. Reducers are pure functions and have to return something!
+2. Named and default exports are different!
+3. The second parameter in the useEffect hook is important!
 
 ## If I had more time, I would...
 
